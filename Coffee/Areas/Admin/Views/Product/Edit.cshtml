@@ -1,8 +1,11 @@
 ﻿@model Coffee.Models.Sanpham
-
+@using Coffee.DataContext;
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    QlcfContext db = new QlcfContext();
+    SelectList dsDanhMuc = new SelectList(db.Danhmucs.ToList(), "CategoryId", "CategoryName");
+    SelectList dsKhuyenmai = new SelectList(db.Khuyenmais.ToList(), "PromotionId", "PromotionName");
 }
 
 <h1>Edit</h1>
@@ -11,7 +14,12 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div class="form-group">
+                <label asp-for="Hinhanh" class="control-label"></label>
+                <input asp-for="Hinhanh" type="file" accept="image/*" class="form-control" />
+                <span asp-validation-for="Hinhanh" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="ProductName" class="control-label"></label>
                 <input asp-for="ProductName" class="form-control" />
@@ -29,21 +37,18 @@
                 <span asp-validation-for="ProductDescription" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Hinhanh" class="control-label"></label>
-                <input asp-for="Hinhanh" class="form-control" />
-                <span asp-validation-for="Hinhanh" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
+                <select asp-for="CategoryId" class="form-control" asp-items="@dsDanhMuc">
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="PromotionId" class="control-label"></label>
-                <select asp-for="PromotionId" class="form-control" asp-items="ViewBag.PromotionId"></select>
-                <span asp-validation-for="PromotionId" class="text-danger"></span>
+                <select asp-for="PromotionId" class="form-control" asp-items="@dsKhuyenmai">
+                    <option value="">Không sử dụng</option>
+                </select>
             </div>
-            <div class="form-group">
+            <div class="form-group mt-3">
+                <a asp-action="Index" class="btn btn-primary me-3">Back to List</a>
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
@@ -51,6 +56,6 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    
 </div>
 

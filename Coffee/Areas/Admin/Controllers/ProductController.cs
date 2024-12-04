@@ -13,18 +13,11 @@ namespace Coffee.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         QlcfContext db = new QlcfContext();
-        public IActionResult Index(int? page)
+        public IActionResult Index()
         {
-            int pageSize = 5;
-            int pageNumber = page ?? 1;
             var query = db.Sanphams.Include(c => c.Category)
                            .Include(p => p.Promotion);
-
-            var products = query.ToList()
-                       .Where(p => p.ProductId.StartsWith("SP") && int.TryParse(p.ProductId.Substring(2), out _))
-                       .OrderByDescending(p => int.Parse(p.ProductId.Substring(2)));
-            //Cần phải clean code + thêm vào chức năng tìm kiếm
-            return View(products);
+            return View(query);
         }
         public IActionResult Create()
         {
@@ -116,34 +109,35 @@ namespace Coffee.Areas.Admin.Controllers
             {
                 try
                 {
-                    var n = db.Sanphams.Find(sp.CategoryId);
+                    var n = db.Sanphams.Find(sp.ProductId);
                     if (n == null)
                     {
                         return BadRequest();
                     }
+
                     n.ProductName = sp.ProductName;
                     n.ProductDescription = sp.ProductDescription;
                     n.Price = sp.Price;
                     n.CategoryId = sp.CategoryId;
+
                     if (sp.Hinhanh != null && sp.Hinhanh.Length > 0)
                     {
                         var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", sp.ProductId + "_" + sp.Hinhanh.FileName);
+
+                        // Save the image to the file system
                         using (var h = System.IO.File.Create(path))
                         {
                             sp.Hinhanh.CopyTo(h);
                         }
 
-                        // 2. Lưu trong database dưới dạng byte
+                        // Save the image as a byte array to the database
                         using (var memoryStream = new MemoryStream())
                         {
                             sp.Hinhanh.CopyTo(memoryStream);
-                            n.Hinhanh = memoryStream.ToArray(); // Lưu dưới dạng byte[]
+                            n.Hinhanh = memoryStream.ToArray(); // Save as byte[]
                         }
                     }
-                    else
-                    {
-                        n.Hinhanh = null;
-                    }
+
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
@@ -157,6 +151,7 @@ namespace Coffee.Areas.Admin.Controllers
                 return View(sp);
             }
         }
+
         public IActionResult Details(byte? id)
         {
             if (id == null)
