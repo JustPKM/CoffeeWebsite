@@ -1,0 +1,80 @@
+﻿@model IEnumerable<Coffee.Models.Khuyenmai>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PromotionId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PromotionName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Startdate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Enddate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PromotionDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PromotionValue)
+            </th>
+            <th>
+                Trạng thái
+            </th>
+            <th>
+                Tác vụ
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PromotionId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PromotionName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Startdate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Enddate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PromotionDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PromotionValue)
+            </td>
+            <td>
+                    @if(item.Enddate < DateTime.Now.Date)
+                    {
+                        <span>Expired</span>
+                    }
+                    else
+                    {
+                        <span>Active</span>
+                    }
+                </td>
+            <td class="d-flex justify-content-evenly">
+                <a asp-action="Edit" asp-route-id="@item.PromotionId" class="btn btn-warning">Edit</a>
+                <a asp-action="Delete" asp-route-id="@item.PromotionId" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

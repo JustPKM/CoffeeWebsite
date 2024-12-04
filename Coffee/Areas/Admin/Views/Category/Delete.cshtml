@@ -1,0 +1,40 @@
+﻿@model Coffee.Models.Danhmuc
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Delete</h1>
+@{
+    if (ViewBag.flagDelete == true)
+    {
+        <h2>Xóa thông tin danh mục</h2>
+        <h3>Bạn muốn xóa danh mục này ?</h3>
+    }
+    else
+    {
+        <h3>Bạn không thể xóa danh mục này!</h3>
+    }
+}
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CategoryName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CategoryName)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="CategoryId" />
+        <a asp-action="Index" class="btn btn-primary">Back to List</a>
+        @if(ViewBag.flagDelete == true)
+        {
+            <input type="submit" value="Delete" class="btn btn-danger" />
+        }    
+
+    </form>
+</div>

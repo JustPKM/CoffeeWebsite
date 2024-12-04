@@ -1,0 +1,49 @@
+﻿@model Coffee.Models.Khuyenmai
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Khuyenmai</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <input type="hidden" asp-for="PromotionId" />
+            <div class="form-group">
+                <label asp-for="PromotionName" class="control-label"></label>
+                <input asp-for="PromotionName" class="form-control" />
+                <span asp-validation-for="PromotionName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PromotionDescription" class="control-label"></label>
+                <textarea asp-for="PromotionDescription" class="form-control"></textarea>
+                <span asp-validation-for="PromotionDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Startdate" class="control-label"></label>
+                <input asp-for="Startdate" class="form-control" />
+                <span asp-validation-for="Startdate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Enddate" class="control-label"></label>
+                <input asp-for="Enddate" class="form-control" />
+                <span asp-validation-for="Enddate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PromotionValue" class="control-label"></label>
+                <input asp-for="PromotionValue" class="form-control" />
+                <span asp-validation-for="PromotionValue" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-4">
+                <a asp-action="Index" class="btn btn-primary me-3">Back to List</a>
+                <input type="submit" value="Save" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+

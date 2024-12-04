@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Coffee.Models.Quyen>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create</a>
+</p>
+<table class="table text-center">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.QuyenId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TenQuyen)
+            </th>
+            <th>Tác vụ</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.QuyenId
+            </td>
+            <td>
+                @item.TenQuyen
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.QuyenId" class="btn btn-warning">Edit</a> 
+                <a asp-action="Delete" asp-route-id="@item.QuyenId" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

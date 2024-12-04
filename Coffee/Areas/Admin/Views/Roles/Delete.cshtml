@@ -1,0 +1,36 @@
+﻿@model Coffee.Models.Quyen
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Delete</h1>
+@{
+    if (ViewBag.flagDelete == true)
+    {
+        <h2>Xóa thông tin quyền</h2>
+        <h3>Bạn muốn xóa quyền này ?</h3>
+    }
+    else
+    {
+        <h3>Bạn không thể xóa quyền này!</h3>
+    }
+}
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TenQuyen)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TenQuyen)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="QuyenId" />
+        <a asp-action="Index" class="btn btn-primary">Back to List</a>
+        <input type="submit" value="Delete" class="btn btn-danger" /> 
+    </form>
+</div>
