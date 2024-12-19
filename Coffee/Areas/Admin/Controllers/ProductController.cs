@@ -16,7 +16,17 @@ namespace Coffee.Areas.Admin.Controllers
         public IActionResult Index()
         {
             var query = db.Sanphams.Include(c => c.Category)
-                           .Include(p => p.Promotion);
+                           .Include(p => p.Promotion)
+                           .Select(p => new Sanpham { 
+                               ProductId = p.ProductId, 
+                               ProductName = p.ProductName, 
+                               ProductDescription = p.ProductDescription, 
+                               Price = p.Promotion != null ? p.Price - (p.Price * p.Promotion.PromotionValue / 100) : p.Price, 
+                               CategoryId = p.CategoryId, 
+                               PromotionId = p.PromotionId,
+                               Category = p.Category,
+                               Promotion = p.Promotion
+                           });  
             return View(query);
         }
         public IActionResult Create()
@@ -50,6 +60,14 @@ namespace Coffee.Areas.Admin.Controllers
                         .Max() + 1;
                 }
 
+                
+
+                var promotion = db.Khuyenmais.FirstOrDefault(k => k.PromotionId == sp.PromotionId); 
+                // Tính giá sau khi giảm nếu có khuyến mãi
+                var priceAfterDiscount = sp.Price; 
+                if (promotion != null) { 
+                    priceAfterDiscount = sp.Price - (sp.Price * promotion.PromotionValue / 100); 
+                }
 
                 Sanpham s = new Sanpham
                 {
@@ -57,11 +75,11 @@ namespace Coffee.Areas.Admin.Controllers
                     ProductId = $"{prefix}{nextNumber:D3}",
                     ProductName = sp.ProductName,
                     ProductDescription = sp.ProductDescription,
-                    Price = sp.Price,
+                    Price = priceAfterDiscount,
                     CategoryId = sp.CategoryId,
                     PromotionId = string.IsNullOrEmpty(sp.PromotionId) ? null : sp.PromotionId,
                     Category = db.Danhmucs.Find(sp.CategoryId),
-                    Promotion = db.Khuyenmais.Find(sp.PromotionId)
+                    Promotion = promotion
                 };
                 if (sp.Hinhanh != null && sp.Hinhanh.Length > 0)
                 {
@@ -115,11 +133,26 @@ namespace Coffee.Areas.Admin.Controllers
                         return BadRequest();
                     }
 
+
+                    if (string.IsNullOrEmpty(sp.PromotionId))
+                    {
+                        n.Price = sp.Price;
+                        n.PromotionId = null;
+                    }
+                    else
+                    {
+                        var promotion = db.Khuyenmais.FirstOrDefault(k => k.PromotionId == sp.PromotionId);
+                        // Tính giá sau khi giảm nếu có khuyến mãi
+                        var priceAfterDiscount = sp.Price;
+                        if (promotion != null)
+                        {
+                            priceAfterDiscount = sp.Price - (sp.Price * promotion.PromotionValue / 100);
+                            n.PromotionId = sp.PromotionId;
+                        }
+                    }
                     n.ProductName = sp.ProductName;
                     n.ProductDescription = sp.ProductDescription;
-                    n.Price = sp.Price;
                     n.CategoryId = sp.CategoryId;
-
                     if (sp.Hinhanh != null && sp.Hinhanh.Length > 0)
                     {
                         var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", sp.ProductId + "_" + sp.Hinhanh.FileName);

@@ -69,13 +69,19 @@
                         }
                         else
                         {
-                            Nhanvien nv = JsonConvert.DeserializeObject<Nhanvien>(session);
-
-                            <div class="nav-item bg-danger text-decoration-none ms-auto">
-                                <div class="nav-link">
-                                    <a href="@Url.Action("Logout","HomeAdmin")" class="text-white"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a>
+                            var nv = JsonConvert.DeserializeObject<Nhanvien>(session);
+                            if(nv!=null){
+                            <div class="nav-item text-decoration-none">
+                                <div class="nav-link text-black">
+                                    @nv.HoTen
                                 </div>
                             </div>
+                            <div class="nav-item bg-danger text-decoration-none ms-auto">
+                                <div class="nav-link">
+                                    <a href="@Url.Action("Logout","HomeAdmin")" class="text-white">Đăng xuất</a>
+                                </div>
+                            </div>
+                            }
                         }
                     }
                 </div>

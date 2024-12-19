@@ -8,18 +8,18 @@ namespace Coffee.Areas.Admin.Controllers
     public class HomeAdminController : Controller
     {
 		QlcfContext db = new QlcfContext();
-		public ActionResult Index()
+		public IActionResult Index()
 		{
 			return View();
 		}
 		[HttpGet]
-		public ActionResult Login()
+		public IActionResult Login()
 		{
             ViewBag.loginCheck = null;
             return View();
 		}
 		[HttpPost]
-		public ActionResult Login(Nhanvien nv)
+		public IActionResult Login(Nhanvien nv)
 		{
 			ViewBag.loginCheck = false;
             var nvDB = db.Nhanviens.FirstOrDefault(n => n.Username.Trim() == nv.Username.Trim() && n.Matkhau.Trim() == nv.Matkhau.Trim());
@@ -33,7 +33,7 @@ namespace Coffee.Areas.Admin.Controllers
 				{
                     HttpContext.Session.SetString("AdminCheck", "false");
                 }
-				string json = JsonConvert.SerializeObject(nv);
+				string json = JsonConvert.SerializeObject(nvDB);
 				HttpContext.Session.SetString("Nhanvien", json);
 				ViewBag.loginCheck = true;
 				return RedirectToAction("Index", "HomeAdmin");
@@ -42,7 +42,7 @@ namespace Coffee.Areas.Admin.Controllers
 
 			return View(nv);
 		}
-		public ActionResult Logout()
+		public IActionResult Logout()
 		{
             ViewBag.loginCheck = null;
 			var session = HttpContext.Session;
