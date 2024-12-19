@@ -3,57 +3,64 @@
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
-
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
-</p>
-<table class="table text-center">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Promotion)
-            </th>
-            <th>Tác vụ</th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-            <tr>
-                <td>@item.ProductId</td>
-                <td>@item.ProductName</td>
-                <td>@item.Price</td>
-                <td>@item.ProductDescription</td>
-                <td>@item.Category?.CategoryName</td>
-                <td>
-                    @if(item.PromotionId == null)
-                    {
-                        <span>Không sử dụng</span>
-                    }
-                    else
-                    {
-                        @item.Promotion?.PromotionName
-                    }
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-warning">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-danger">Delete</a>
-                </td>
-            </tr>
+@{
+    var session = Context.Session.GetString("Nhanvien");
+    if (session == null)
+    {
+        <h4 class="text-center mt-5">You must login to access the data!</h4>
+    } else{
+        <p>
+            <a asp-action="Create" class="btn btn-primary">Create New</a>
+        </p>
+        <table class="table text-center">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProductId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProductName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Price)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProductDescription)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Category)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Promotion)
+                    </th>
+                    <th>Tác vụ</th>
+                </tr>
+            </thead>
+            <tbody>
+        @foreach (var item in Model) {
+                    <tr>
+                        <td>@item.ProductId</td>
+                        <td>@item.ProductName</td>
+                        <td>@item.Price</td>
+                        <td>@item.ProductDescription</td>
+                        <td>@item.Category?.CategoryName</td>
+                        <td>
+                            @if(item.PromotionId == null)
+                            {
+                                <span>Không sử dụng</span>
+                            }
+                            else
+                            {
+                                @item.Promotion?.PromotionName
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-warning">Edit</a> |
+                            <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+        }
+            </tbody>
+        </table>
+    }
 }
-    </tbody>
-</table>

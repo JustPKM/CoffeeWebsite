@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Coffee.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
 </head>
 <body>
-    <header class="container-fluid page-header">
+    <header class="container-fluid page-header fixed-top">
         <div class="background-blur"></div>
         <nav class="navbar navbar-expand-lg navbar-light pg-lib-item py-lg-1" data-navbar-id="{bs-navbar}">
             <div class="container-fluid">
@@ -28,20 +29,24 @@
                             <a class="nav-link text-white px-lg-3 py-lg-4" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white px-lg-3 py-lg-4" asp-controller="Home" asp-action="Menu">Thực đơn</a>
+                            <a class="nav-link text-white px-lg-3 py-lg-4" asp-controller="Product" asp-action="Index">Thực đơn</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white px-lg-3 py-lg-4" asp-controller="Home" asp-action="About">Về chúng tôi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white px-lg-3 py-lg-4" asp-controller="Cart" asp-action="Index">Đơn hàng</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
         <div class="overlay-text"> 
-            <h1>Menu</h1> 
+            <h1>Coffingme</h1> 
         </div>
     </header>
     <div class="container-fluid">
+        <partial name="~/Views/Shared/_AddToCartNotification.cshtml" />
         @RenderBody()
     </div>
         
@@ -50,6 +55,58 @@
             &copy; 2024 - Coffee - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+    <script>
+        $(document).ready(function () { 
+            $('#Menu').carousel({ interval: 3000 }); 
+            function adjustCarouselItems() { 
+                if ($(window).width() < 576) { 
+                    $('.carousel-inner .carousel-item').each(function () {
+                        var $item = $(this); 
+                        if (!$item.hasClass('cloned')) { 
+                            var items = $item.find('.col-md-4').clone(); 
+                            $item.empty().append(items[0]); 
+                            $item.addClass('cloned'); 
+                        } 
+                    }); 
+                } else if ($(window).width() >= 576 && $(window).width() < 768) {
+                    $('.carousel-inner .carousel-item').each(function () {
+                        var $item = $(this); 
+                        $item.removeClass('cloned'); 
+                        var items = $item.find('.col-md-4'); 
+                        $item.empty().append(items.slice(0, 2)); 
+                    }); 
+                } else {
+                    $('.carousel-inner .carousel-item').each(function () {
+                        var $item = $(this); 
+                        $item.removeClass('cloned'); 
+                        var items = $item.find('.col-md-4'); 
+                        $item.empty().append(items.slice(0, 3)); 
+                    }); 
+                } 
+            } 
+            adjustCarouselItems(); 
+            $(window).resize(adjustCarouselItems); 
+        });
+     </script>
+    <script>
+        function increaseValue() {
+            var value = parseInt(document.getElementById('quantityInput').value, 10);
+            value = isNaN(value) ? 0 : value;
+            value++;
+            document.getElementById('quantityInput').value = value;
+        }
+
+        function decreaseValue() {
+            var value = parseInt(document.getElementById('quantityInput').value, 10);
+            value = isNaN(value) ? 0 : value;
+            value--;
+            if (value < 1) {
+                value = 1;
+            }
+            document.getElementById('quantityInput').value = value;
+        }
+    </script>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

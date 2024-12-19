@@ -1,0 +1,121 @@
+﻿@using Coffee.Models.ViewModels;
+@model CheckoutViewModel
+@{
+    Layout = "_Layout";
+}
+<!-- Checkout Page Start -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <h1 class="mb-4">Billing details</h1>
+        <form asp-action="Checkout" method="post">
+            <div class="row g-5">
+                <div class="col-md-12 col-lg-6 col-xl-7">
+                    <div class="form-group">
+                        <label asp-for="HoTen" class="control-label my-3">Full name <sup>*</sup></label>
+                        <input asp-for="HoTen" class="form-control" placeholder="Nguyen Van A">
+                        <span asp-validation-for="HoTen" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DiaChi" class="control-label my-3">Address <sup>*</sup></label>
+                        <input asp-for="DiaChi" class="form-control">
+                        <span asp-validation-for="DiaChi" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="SoDienThoai" class="control-label my-3">Phone number<sup>*</sup></label>
+                        <input asp-for="SoDienThoai" class="form-control">
+                        <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label my-3">Email Address<sup>*</sup></label>
+                        <input asp-for="Email" class="form-control">
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="GhiChu" class="control-label"></label>
+                        <textarea style="resize:none;" asp-for="GhiChu" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Order Notes (Optional)"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6 col-xl-5">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr class="text-center">
+                                    <th scope="col">Products</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.CartItems.Count > 0)
+                                {
+                                    @foreach (var item in Model.CartItems)
+                                    {
+                                        <tr>
+                                            <th scope="row">
+                                                <div class="d-flex align-items-center justify-content-center">
+                                                    <img src="@Url.Action("GetImage", "Product", new { id = item.ProductId })" class="img-fluid rounded-circle" style="width: 80px; height: 80px;" alt="@item.ProductName">
+                                                </div>
+                                            </th>
+                                            <td class="cart_description text-center">
+                                                <p>@item.ProductName</p>
+                                            </td>
+                                            <td class="cart_price text-center">
+                                                <p>@string.Format("{0:N0} VNĐ", item.DonGia)</p>
+                                            </td>
+                                            <td class="cart_quantity text-center">
+                                                <p class="cart_quantity text-center">@item.SoLuong</p>
+                                            </td>
+                                            <td class="cart_total text-center">
+                                                <p class="cart_total_price">
+                                                    @String.Format("{0:N0} VNĐ", Model.CartItems.Where(x => x.ProductId == item.ProductId).Sum(x => x.SoLuong * x.DonGia))
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    }
+                                    <tr style="border: none;">
+                                        <td colspan="5" style="border: none;" class="text-end">
+                                            Tổng cộng: @Model.CartItems.Sum(x => x.SoLuong * x.DonGia).ToString("N0") VNĐ
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr> 
+                                        <td colspan="5" class="text-center">
+                                            <p class="text-danger">Giỏ hàng của bạn hiện đang trống. Vui lòng thêm sản phẩm vào giỏ hàng.</p> 
+                                        </td> 
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3"> 
+                        <div class="col-12"> 
+                            <div >
+                                <span asp-validation-for="PhuongThuc" class="text-danger"></span>
+                            </div>
+                            <div class="form-check text-start my-3"> 
+                                <input type="radio" asp-for="PhuongThuc" class="form-check-input bg-primary border-0" id="PaymentCOD" name="Phuongthuc" value="COD">
+                                <label class="form-check-label" for="PaymentCOD">Cash On Delivery (COD)</label> 
+                            </div> 
+                            <div class="form-check text-start my-3">
+                                <input type="radio" asp-for="PhuongThuc" class="form-check-input bg-primary border-0" id="PaymentVNPAY" name="Phuongthuc" value="VNPAY">
+                                <label class="form-check-label" for="PaymentVNPAY">VNPAY</label>
+                            </div>
+                            <div class="form-check text-start my-3"> 
+                                <input type="radio" asp-for="PhuongThuc" class="form-check-input bg-primary border-0" id="PaymentMomo" name="Phuongthuc" value="MOMO">
+                                <label class="form-check-label" for="PaymentMomo">MOMO</label>
+                            </div> 
+                        </div> 
+                    </div>
+                    <div class="row g-4 text-center align-items-center justify-content-center pt-4">
+                        <input type="submit" value="Đặt hàng" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Checkout Page End -->

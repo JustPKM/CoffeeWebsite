@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Newtonsoft.Json;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Coffee.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
 </head>
 <body>
     <div class="d-flex">
@@ -15,9 +17,6 @@
         <nav class="bg-dark text-white p-3 vh-100" style="width: 250px;">
             <h4 class="text-center">Admin Panel</h4>
             <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Dashboard</a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link text-white" asp-area="Admin" asp-controller="Category" asp-action="Index">Danh mục</a>
                 </li>
@@ -28,28 +27,28 @@
                     <a class="nav-link text-white" asp-area="Admin" asp-controller="Product" asp-action="Index">Sản phẩm</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Analytics</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" asp-area="Admin" asp-controller="Roles" asp-action="Index">Phân quyền</a>
-                </li>
-                <li class="nav-item">
                     <button class="btn btn-dark text-white w-100 text-start" type="button" data-bs-toggle="collapse" data-bs-target="#moreOptions" aria-expanded="false" aria-controls="moreOptions">
-                        More Options
+                        Đơn hàng
                     </button>
                     <div class="collapse" id="moreOptions">
                         <ul class="nav flex-column ps-3">
                             <li class="nav-item">
-                                <a class="nav-link text-white" href="#">Sub-option 1</a>
+                                <a class="nav-link text-white" asp-area="Admin" asp-controller="Order" asp-action="Index">Danh sách các đơn hàng</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" href="#">Sub-option 2</a>
+                                <a class="nav-link text-white" asp-area="Admin" asp-controller="Order" asp-action="PendingOrders">Danh sách các đơn hàng chờ duyệt</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" href="#">Sub-option 3</a>
+                                <a class="nav-link text-white" asp-area="Admin" asp-controller="Order" asp-action="VerifiedOrders">Danh sách các đơn hàng đã duyệt</a>
                             </li>
                         </ul>
                     </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="Nhanvien" asp-action="Index">Nhân viên</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="Roles" asp-action="Index">Phân quyền</a>
                 </li>
             </ul>
         </nav>
@@ -58,10 +57,31 @@
         <div class="p-4 flex-grow-1">
             <nav class="navbar navbar-light bg-light">
                 <div class="container-fluid">
-                    <a class="navbar-brand ms-auto">Navbar</a>
+                    @{
+                        var session = Context.Session.GetString("Nhanvien");
+                        if (session == null)
+                        {
+                            <div class="nav-item bg-info text-decoration-none ms-auto">
+                                <div class="nav-link text-decoration-none">
+                                    <a href="@Url.Action("Login","HomeAdmin")" class="text-white text-decoration-none"><i class="fa-solid fa-right-to-bracket"></i> Đăng nhập</a>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            Nhanvien nv = JsonConvert.DeserializeObject<Nhanvien>(session);
+
+                            <div class="nav-item bg-danger text-decoration-none ms-auto">
+                                <div class="nav-link">
+                                    <a href="@Url.Action("Logout","HomeAdmin")" class="text-white"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a>
+                                </div>
+                            </div>
+                        }
+                    }
                 </div>
             </nav>
             <main>
+                <partial name="~/Areas/Admin/Views/Shared/_Notification.cshtml" />
                 @RenderBody()
             </main>
         </div>

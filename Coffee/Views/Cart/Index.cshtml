@@ -1,0 +1,75 @@
+﻿@using Coffee.Models.ViewModels;
+@model CartItemViewModel
+@{
+	ViewData["Title"] = "Index";
+	Layout = "_Layout";
+}
+
+<!-- Checkout Page Start -->
+<div class="container-fluid py-5">
+	<div class="container py-5">
+	<section id="cart_items">
+		<div class="container">
+			<div class="table-responsive cart_info">
+				<table class="table table-condensed">
+					<thead>
+						<tr class="cart_menu text-center">
+							<td class="image">Sản phẩm</td>
+							<td class="description">Tên sản phẩm</td>
+							<td class="price">Đơn giá</td>
+							<td class="quantity">Số lượng</td>
+							<td class="total">Tổng</td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody >
+							@if (Model.CartItems.Count > 0)
+							{
+								@foreach (var item in Model.CartItems)
+								{
+									<tr>
+										<th scope="row">
+											<div class="d-flex align-items-center justify-content-center">
+												<img src="@Url.Action("GetImage", "Product", new { id = item.ProductId })" class="img-fluid rounded-circle" style="width: 80px; height: 80px;" alt="@item.ProductName">
+											</div>
+										</th>
+										<td class="cart_description text-center">
+											<p>@item.ProductName</p>
+										</td>
+										<td class="cart_price text-center">
+											<p>@string.Format("{0:N0} VNĐ", item.DonGia)</p>
+										</td>
+										<td class="cart_quantity text-center">
+											<a class=" btn btn-outline-danger btn-sm" asp-controller="Cart" asp-action="Decrease" asp-route-id="@item.ProductId"> - </a>
+											<input class="cart_quantity_input text-center" type="text" name="quantity" value="@item.SoLuong" autocomplete="off" size="2">
+											<a class="btn btn-outline-success btn-sm" asp-controller="Cart" asp-action="Increase" asp-route-id="@item.ProductId"> + </a>
+										</td>
+										<td class="cart_total text-center">
+											<p class="cart_total_price">
+												@String.Format("{0:N0} VNĐ", Model.CartItems.Where(x => x.ProductId == item.ProductId).Sum(x => x.SoLuong * x.DonGia))
+											</p>
+										</td>
+										<td class="cart_delete">
+											<a class=" btn btn-danger btn-sm" asp-controller="Cart" asp-action="Remove" asp-route-id="@item.ProductId">X</a>
+										</td>
+									</tr>
+								}
+								<tr style="border: none;">
+									<td colspan="6" style="border: none;" class="text-end">
+										Tổng cộng: @Model.GrandTotal.ToString("N0") VNĐ
+										<a class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" asp-action="Checkout" asp-controller="Cart">Proceed Checkout</a>
+									</td>
+								</tr>
+
+							}
+						</tbody>
+				</table>
+			</div>
+		</div>
+	</section> <!--/#cart_items-->
+		<div class="mt-5">
+			<input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
+			<button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="button">Apply Coupon</button>
+		</div>
+	</div>
+</div>

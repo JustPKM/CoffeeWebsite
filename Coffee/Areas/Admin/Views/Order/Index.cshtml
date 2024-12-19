@@ -4,62 +4,109 @@
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
+@{   
+    var session = Context.Session.GetString("Nhanvien");
+    if (session == null)
+    {
+        <h4 class="text-center mt-5">You do not have the permission to access!</h4>
+    } 
+    else{
+        <h1>Danh sách đơn hàng</h1>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        Ngày đặt
+                    </th>
+                    <th>
+                        Địa chỉ
+                    </th>
+                    <th>
+                        Họ tên khách hàng
+                    </th>
+                    <th>
+                        Nhân viên đảm nhận
+                    </th>
+                    <th>
+                        Tổng tiền
+                    </th>
+                    <th>
+                        Trạng thái
+                    </th>
+                    <th>Tác vụ</th>
+                </tr>
+            </thead>
+            <tbody>
+        @foreach (var item in Model) {
+                    string rowClass = item.Trangthai.Trim(); 
+                    switch (rowClass) { 
+                        case "Pending": 
+                            rowClass = "table-warning"; 
+                            break; 
+                        case "Reject": 
+                            rowClass = "table-danger"; 
+                            break; 
+                        case "Verified": 
+                            rowClass = "table-info"; 
+                            break; 
+                        case "Delivering":
+                            rowClass = "table-primary";
+                            break;
+                        case "Completed":
+                            rowClass = "table-success";
+                            break;
+                        default: 
+                            rowClass = ""; 
+                            break; 
+                    }
+                <tr class="@rowClass">
+                    <td>
+                        @item.DonhangId
+                    </td>
+                    <td>
+                        @item.Ngaydat
+                    </td>
+                    <td>
+                        @item.Diachi
+                    </td>
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Ngaydat)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Diachi)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Customer.HoTen)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Employee.HoTen)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tongtien)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Trangthai)
-            </th>
-            <th>Tác vụ</th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @item.Ngaydat
-            </td>
-            <td>
-                @item.Diachi
-            </td>
-
-            <td>
-                @item.Customer.HoTen
-            </td>
-            <td>
-                @item.Employee.HoTen
-            </td>
-            <td>
-                @item.Tongtien
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Trangthai)
-            </td>
-            <td>
-                <a asp-action="Delete" asp-route-id="@item.DonhangId" class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
+                    <td>
+                        @item.Customer.HoTen
+                    </td>
+                    <td>
+                        @item.Employee.HoTen
+                    </td>
+                    <td>
+                        @item.Tongtien
+                    </td>
+                    <td>
+                        @item.Trangthai
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.DonhangId" class="btn btn-primary">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.DonhangId" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+        }
+            </tbody>
+        </table>
+    }
 }
-    </tbody>
-</table>
+@section Scripts { 
+    <script> 
+        function submitForm(selectElement) { 
+            selectElement.form.submit(); 
+        } 
+        document.addEventListener("DOMContentLoaded", function() { 
+            var updateForms = document.querySelectorAll(".update-form select"); 
+            updateForms.forEach(function(select) { 
+                select.addEventListener("change", function() { 
+                    submitForm(this); 
+                }); 
+            }); 
+        }); 
+    </script>
+}

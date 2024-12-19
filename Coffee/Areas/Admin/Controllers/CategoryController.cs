@@ -29,10 +29,12 @@ namespace Coffee.Areas.Admin.Controllers
                 dm.CategoryId = (byte)nextId;
                 db.Danhmucs.Add(dm);
                 db.SaveChanges();
+                TempData["success"] = "Tạo danh mục thành công!";
                 return RedirectToAction("Index");
             }
             else
             {
+                TempData["error"] = "Tạo danh mục thất bại!";
                 return View(dm);
             }
         }
@@ -64,6 +66,7 @@ namespace Coffee.Areas.Admin.Controllers
                     }
                     d.CategoryName = dm.CategoryName;
                     db.SaveChanges();
+                    TempData["success"] = "Chỉnh sửa danh mục thành công!";
                     return RedirectToAction("Index");
                 }
                 catch (DbUpdateConcurrencyException)
@@ -73,6 +76,7 @@ namespace Coffee.Areas.Admin.Controllers
             }
             else
             {
+                TempData["error"] = "Chỉnh sửa danh mục thất bại!";
                 return View(dm);
             }
         }
@@ -102,8 +106,10 @@ namespace Coffee.Areas.Admin.Controllers
             if(dm != null)
             {
                 db.Danhmucs.Remove(dm);
-            }
-            db.SaveChanges();
+				db.SaveChanges();
+                TempData["success"] = "Xóa danh mục thành công";
+			}
+            
             return RedirectToAction("Index");
         }
     }

@@ -19,13 +19,16 @@ html {
 
 body {
     margin-bottom: 60px;
-    
+
 }
 
 textarea {
     resize: none;
 }
-
+#img-ref {
+    text-decoration:none;
+    color:black;
+}
 #carouselExampleControls {
     
     top: 0;
@@ -60,4 +63,9 @@ textarea {
     color: white;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     z-index: 10; /* Đảm bảo rằng văn bản nằm trên ảnh nền */
+}
+
+.card-height{
+    height:200px;
+    object-fit:cover;
 }

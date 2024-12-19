@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Coffee.Models;
 
 public partial class ChiTietHoaDon
 {
+    [StringLength(100, ErrorMessage = "Ghi chú không được quá 100 ký tự!")]
     public string? Ghichu { get; set; }
 
     public decimal ThanhTien { get; set; }

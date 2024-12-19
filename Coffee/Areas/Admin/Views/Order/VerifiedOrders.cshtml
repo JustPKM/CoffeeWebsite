@@ -1,0 +1,86 @@
+﻿@model IEnumerable<Coffee.Models.Donhang>
+
+@{
+    ViewData["Title"] = "Verified and Rejected Orders";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+@{    
+    var session = Context.Session.GetString("Nhanvien");
+    if (session == null)
+    {
+        <h4 class="text-center mt-5">You must login to access the data!</h4>
+    } 
+    else
+    {
+        <h1>Orders Ongoing</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Ngày đặt</th>
+                    <th>Địa chỉ</th>
+                    <th>Họ tên khách hàng</th>
+                    <th>Nhân viên đảm nhận</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    string rowClass = item.Trangthai.Trim();
+                    switch (rowClass)
+                    {
+                        case "Reject":
+                            rowClass = "table-danger";
+                            break;
+                        case "Verified":
+                            rowClass = "table-info";
+                            break;
+                        case "Delivering":
+                            rowClass = "table-primary";
+                            break;
+                        default:
+                            rowClass = "";
+                            break;
+                    }
+                    <tr class="@rowClass">
+                        <td>@item.DonhangId</td>
+                        <td>@item.Ngaydat</td>
+                        <td>@item.Diachi</td>
+                        <td>@item.Customer.HoTen</td>
+                        <td>
+                            <form asp-action="UpdateEmployee" method="post" class="update-form">
+                                <input type="hidden" name="DonhangId" value="@item.DonhangId" />
+                                @Html.DropDownList("EmployeeId", new SelectList(ViewBag.EmployeeList, "Value", "Text", item.Employee.EmployeeId), new { @class = "form-control", onchange = "submitForm(this);" })
+                            </form>
+                        </td>
+                        <td>@item.Tongtien</td>
+                        <td>
+                            <form asp-action="UpdateStatus" method="post" class="update-form">
+                                <input type="hidden" name="DonhangId" value="@item.DonhangId" />
+                                @Html.DropDownList("Trangthai", new SelectList(ViewBag.TrangthaiList, item.Trangthai), new { @class = "form-control", onchange = "submitForm(this);" })
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+@section Scripts {
+    <script>
+        function submitForm(selectElement) {
+            selectElement.form.submit();
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var updateForms = document.querySelectorAll(".update-form select");
+            updateForms.forEach(function (select) {
+                select.addEventListener("change", function () {
+                    submitForm(this);
+                });
+            });
+        });
+    </script>
+}

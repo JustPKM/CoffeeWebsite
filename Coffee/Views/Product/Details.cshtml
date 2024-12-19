@@ -1,0 +1,20 @@
+﻿@model Coffee.Models.Sanpham
+@{
+	ViewData["Title"] = "Details";
+	Layout = "_Layout";
+}
+<form method="post">
+	<div class="container mt-5">
+		<div class="row">
+			<div class="col-md-6">
+				<img height="400" width="400" src="@Url.Action("GetImage", "Product", new { id = Model.ProductId })" class="img-fluid" alt="@Model.ProductName">
+			</div>
+			<div class="col-md-6">
+				<h2>@Model.ProductName</h2>
+				<p class="price-label">Giá cả: @string.Format("{0:N0} VNĐ", Model.Price)</p>
+				<p>@Model.ProductDescription</p>
+				<a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@Model.ProductId" class="btn btn-primary add-to-cart">Add to cart</a>
+			</div>
+		</div>
+	</div>
+</form>

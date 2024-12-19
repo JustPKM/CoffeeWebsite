@@ -1,0 +1,53 @@
+﻿@model Coffee.Models.ViewModels.NhanVienModel
+@using Coffee.DataContext;
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Create</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Nhanvien.HoTen" class="control-label"></label>
+                <input asp-for="Nhanvien.HoTen" class="form-control" />
+                <span asp-validation-for="Nhanvien.HoTen" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Nhanvien.Username" class="control-label"></label>
+                <input asp-for="Nhanvien.Username" class="form-control" />
+                <span asp-validation-for="Nhanvien.Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SoDienThoai" class="control-label">Số Điện Thoại</label>
+                <input asp-for="SoDienThoai" class="form-control" />
+                <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Nhanvien.Matkhau" class="control-label"></label>
+                <input asp-for="Nhanvien.Matkhau" class="form-control" />
+                <span asp-validation-for="Nhanvien.Matkhau" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Nhanvien.Email" class="control-label"></label>
+                <input asp-for="Nhanvien.Email" class="form-control" />
+                <span asp-validation-for="Nhanvien.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Nhanvien.QuyenId" class="control-label"></label>
+                <select asp-for="Nhanvien.QuyenId" class="form-control" asp-items="ViewBag.QuyenList"></select>
+                <span asp-validation-for="Nhanvien.QuyenId" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-4">
+                <a asp-action="Index" class="btn btn-primary me-3">Back to List</a>
+                <input type="submit" value="Save" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+

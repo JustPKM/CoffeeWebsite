@@ -1,0 +1,64 @@
+﻿@model Coffee.Models.Donhang
+
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Order Details</h1>
+
+<table class="table">
+    <tbody> 
+        <tr> 
+            <th>Order ID</th> 
+            <td>@Model.DonhangId</td> 
+        </tr> 
+        <tr> 
+            <th>Order Date</th> 
+            <td>@Model.Ngaydat.ToString("dd/MM/yyyy")</td> 
+        </tr> 
+        <tr> 
+            <th>Customer Name</th> 
+            <td>@Model.Customer.HoTen</td> 
+        </tr> 
+        <tr> 
+            <th>Employee</th> 
+            <td>@Model.Employee.HoTen</td> 
+        </tr> 
+        <tr> 
+            <th>Address</th> 
+            <td>@Model.Diachi</td> 
+        </tr> 
+        <tr> 
+            <th>Status</th> 
+            <td>@Model.Trangthai</td> 
+        </tr> 
+        <tr> 
+            <th>Total Price</th> 
+            <td>@Model.Tongtien.ToString("N0") VNĐ</td> 
+        </tr> 
+    </tbody>
+</table>
+
+<h2>Order Items</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ChiTietDonHangs)
+        {
+            <tr>
+                <td>@item.Product.ProductName</td>
+                <td>@item.Soluong</td>
+                <td>@item.Dongia.ToString("N0") VNĐ</td>
+                <td>@item.Thanhtien.ToString("N0") VNĐ</td>
+            </tr>
+        }
+    </tbody>
+</table>

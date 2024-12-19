@@ -151,20 +151,6 @@ namespace Coffee.Areas.Admin.Controllers
                 return View(sp);
             }
         }
-
-        public IActionResult Details(byte? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            var dm = db.Danhmucs.Find(id);
-            if (dm == null)
-            {
-                return NotFound();
-            }
-            return View(dm);
-        }
         public IActionResult Delete(string? id)
         {
             if (id == null)

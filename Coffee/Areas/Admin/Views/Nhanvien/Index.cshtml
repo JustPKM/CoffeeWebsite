@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Coffee.Models.Nhanvien>
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+@{
+    var session = Context.Session.GetString("Nhanvien");
+    var adminCheck = Context.Session.GetString("AdminCheck");
+    if (session == null || adminCheck == "false")
+    {
+        <h4 class="text-center mt-5">You do not have the permission to access the data!</h4>
+    }
+    else
+    {
+        <h2>Index</h2>
+        <table class="table text-center">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmployeeId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.HoTen)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Username)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Matkhau)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Quyen.TenQuyen)
+                    </th>
+                    <th>Tác vụ</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.EmployeeId</td>
+                        <td>@item.HoTen</td>
+                        <td>@item.Email</td>
+                        <td>@item.Username</td>
+                        <td>@item.Matkhau</td>
+                        <td>@item.Quyen.TenQuyen</td>
+                        <td>
+                            <a asp-action="Delete" asp-route-id="@item.EmployeeId" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}

@@ -16,6 +16,7 @@ public partial class Sanpham
     [Required(ErrorMessage = "Nhập đơn giá cho sản phẩm")]
     public decimal Price { get; set; }
     [DisplayName("Mô tả")]
+    [StringLength(100, ErrorMessage = "Mô tả không được quá 100 ký tự!")]
     public string? ProductDescription { get; set; }
     [DisplayName("Hình")]
     public byte[]? Hinhanh { get; set; }
