@@ -104,7 +104,7 @@ namespace Coffee.Areas.Admin.Controllers
         }
         public IActionResult Delete(string id)
         {
-            var dh = db.Donhangs.Find(id);
+            var dh = db.Donhangs.Include(k=>k.Customer).FirstOrDefault(d=>d.DonhangId==id);
             if(dh == null)
             {
                 return NotFound();
