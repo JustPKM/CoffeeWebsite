@@ -66,7 +66,10 @@ namespace Coffee.Areas.Admin.Controllers
                 // Tính giá sau khi giảm nếu có khuyến mãi
                 var priceAfterDiscount = sp.Price; 
                 if (promotion != null) { 
-                    priceAfterDiscount = sp.Price - (sp.Price * promotion.PromotionValue / 100); 
+                    if (promotion.Enddate < DateTime.Now)
+                    {
+                        priceAfterDiscount = sp.Price - (sp.Price * promotion.PromotionValue / 100);
+                    }
                 }
 
                 Sanpham s = new Sanpham
@@ -201,13 +204,23 @@ namespace Coffee.Areas.Admin.Controllers
         [HttpPost, ActionName("Delete")]
         public IActionResult Delete_Confirmed(string? id)
         {
-            var sp = db.Sanphams.Find(id);
+            var sp = db.Sanphams.Include(c=>c.ChiTietDonHangs).FirstOrDefault(s=>s.ProductId == id);
             
             if (sp != null)
             {
+                if (sp.ChiTietDonHangs.Any())
+                {
+                    TempData["error"] = "Không thể xóa sản phẩm này vì còn chi tiết đơn hàng!";
+                    return RedirectToAction("Index");
+                }
                 db.Sanphams.Remove(sp);
+                db.SaveChanges();
+                TempData["success"] = "Đã xóa sản phẩm thành công!";
             }
-            db.SaveChanges();
+            else
+            {
+                TempData["error"] = "Không tìm thấy sản phẩm!";
+            }
             return RedirectToAction("Index");
         }
     }
