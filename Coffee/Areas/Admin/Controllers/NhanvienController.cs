@@ -46,6 +46,12 @@ namespace Coffee.Areas.Admin.Controllers
             {
                 model.Nhanvien.Quyen = quyen;
             }
+            else
+            {
+                ModelState.AddModelError("Nhanvien.Quyen", "Quyen is required."); 
+                TempData["error"] = "Tạo nhân viên thất bại! Không tìm thấy quyền."; 
+                return View(model);
+            }
 
             if (ModelState.IsValid)
             {
